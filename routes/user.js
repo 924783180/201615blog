@@ -4,7 +4,7 @@ let express = require('express');
 let router = express.Router();
 //这里的路径是子路径
 router.get('/signup',function(req,res){
-  res.send('注册');
+  res.render('user/signup',{title:'用户注册'});
 });
 router.get('/signin',function(req,res){
   res.send('登录');

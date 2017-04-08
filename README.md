@@ -23,3 +23,6 @@ npm install express mongoose ejs debug body-parser cookie-parser connect-flash c
 1. /user/signup /user/signin /user/signout
 2. /article/add /article/list
 
+
+## 5. 用户注册
+
