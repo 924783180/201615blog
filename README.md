@@ -25,4 +25,7 @@ npm install express mongoose ejs debug body-parser cookie-parser connect-flash c
 
 
 ## 5. 用户注册
-
+1. 当客户端通过 `/user/signup` 访问服务器的时候，服务器会返回一个空白注册表单。
+2. 当用户填写完表单表，会点击提交按钮，这时浏览器会把表单的数据进行序列化转成化查询字符串的格式，并放在请求体里提交给服务器
+3. 服务器接收到请求后，会把请求体中的数据通过`body-parser`中间件拿到。转成**JS**对象赋给`req.body`.
+4. 把此对象保存数据库里，成功后跳转到登录页。如果失败了会回到注册页。
