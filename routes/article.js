@@ -45,4 +45,17 @@ router.get('/update/:_id',function (req,res) {
     res.render('article/add',{title:'修改文章',article});
   })
 });
+router.post('/update/:_id',function(req,res){
+  let _id = req.params._id;//得到路径里的文章的ID
+  let article = req.body;//得到请求体对象
+  Article.update({_id},article,function(err,result){
+      if(err){ //如果有错误
+        req.flash('error','更新文章失败');
+        res.redirect('back');
+      }else{
+        req.flash('success','更新文章成功');
+        res.redirect(`/article/detail/${_id}`);
+      }
+  });
+});
 module.exports = router;
