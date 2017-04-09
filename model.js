@@ -1,6 +1,7 @@
 let mongoose = require('mongoose');
 //连接数据库
-mongoose.connect('mongodb://127.0.0.1/201615blog');
+let url = require('./config').url;
+mongoose.connect(url);
 //定义模型骨架
 //如何手工强行指定集合的名称
 let UserSchema = new mongoose.Schema({

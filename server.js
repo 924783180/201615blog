@@ -6,6 +6,7 @@ let user = require('./routes/user');
 let article = require('./routes/article');
 let bodyParser = require('body-parser');
 let session = require('express-session');
+let MongoStore = require('connect-mongo')(session);
 //这是一个把信息写在session中的中间件
 let flash = require('connect-flash');
 let app = express();
@@ -15,10 +16,12 @@ app.use(express.static(path.resolve('public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 // req.session
+let url = require('./config').url;
 app.use(session({
     resave:true,//每次保存session
     saveUninitialized:true,//保存未初始化session
-    secret:'zfpx'//加密cookie秘钥
+    secret:'zfpx',//加密cookie秘钥
+    store:new MongoStore({url})   //指定session数据的存储位置
 }));
 //此中间件会向req.flash。可以读写消息
 // req.flash(type,msg) req.flash(type)

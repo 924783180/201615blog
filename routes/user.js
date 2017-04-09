@@ -17,15 +17,23 @@ router.post('/signup',upload.single('avatar'),function (req,res) {
     let user = req.body;
     //给头像图片的路径赋值
     user.avatar = `/uploads/${req.file.filename}`;
-    User.create(user,function(err,doc){
-        if(err){
+    User.findOne({username:user.username},function(err,oldUser){
+      if(oldUser){
+        req.flash('error','此用户名已经被注册,请换个名称试试吧');
+        res.redirect('back');
+      }else{
+        User.create(user,function(err,doc){
+          if(err){
             req.flash('error',err.toString());
             res.redirect('back');
-        }else{
+          }else{
             req.flash('success','注册成功，请登录!');
             res.redirect('/user/signin');
-        }
+          }
+        })
+      }
     })
+
 });
 router.get('/signin',function(req,res){
   res.render('user/signin',{title:'登录'});
