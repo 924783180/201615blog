@@ -3,7 +3,7 @@ let router = express.Router();
 let {checkLogin} = require('../ware');
 let Article = require('../model').Article;
 router.get('/add',checkLogin,function(req,res){
-  res.render('article/add',{title:'发表文章'});
+  res.render('article/add',{title:'发表文章',article:{}});
 });
 router.post('/add',checkLogin,function (req,res) {
   let article = req.body;//得到客户端提交的文章对象
@@ -20,7 +20,29 @@ router.post('/add',checkLogin,function (req,res) {
   });
 
 });
-router.get('/list',checkLogin,function(req,res){
-    res.send('文章列表');
+// /article/detail/1
+router.get('/detail/:_id',function(req,res){
+  let _id = req.params._id;
+  Article.findById(_id,function(err,article){
+    res.render('article/detail',{title:"文章详情",article});
+  })
+});
+router.get('/delete/:_id',function (req,res) {
+  let _id = req.params._id;
+  Article.remove({_id},function(err,result){
+    if(err){
+      req.flash('error','删除文章失败');
+      res.redirect('back');
+    }else{
+      req.flash('success','删除文章成功');
+      res.redirect('/');
+    }
+  })
+});
+router.get('/update/:_id',function (req,res) {
+  let _id = req.params._id;
+  Article.findById(_id,function(err,article){
+    res.render('article/add',{title:'修改文章',article});
+  })
 });
 module.exports = router;
