@@ -20,7 +20,7 @@ let url = require('./config').url;
 app.use(session({
     resave:true,//每次保存session
     saveUninitialized:true,//保存未初始化session
-    cookie:{maxAge:1000*10},
+    cookie:{maxAge:1000*3600},
     secret:'zfpx',//加密cookie秘钥
     store:new MongoStore({url})   //指定session数据的存储位置
 }));
