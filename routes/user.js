@@ -2,6 +2,7 @@ let express = require('express');
 let User = require('../model').User;
 let multer = require('multer');
 let path = require('path');
+let {checkLogin,checkNotLogin} = require('../ware');
 //因为系统是在server.js上启动的，所有路径的当前目录
 //就是项目根目录
 let upload = multer({dest:'./public/uploads'});
@@ -9,11 +10,11 @@ let upload = multer({dest:'./public/uploads'});
 //路由中间件本质上是一个中间件
 let router = express.Router();
 //这里的路径是子路径
-router.get('/signup',function(req,res){
+router.get('/signup',checkNotLogin,function(req,res){
     res.render('user/signup',{title:'用户注册'});
 });
 //1.得到请求体 2.定义model 3.调用model.create方法把此用户保存到数据库中
-router.post('/signup',upload.single('avatar'),function (req,res) {
+router.post('/signup',checkNotLogin,upload.single('avatar'),function (req,res) {
     let user = req.body;
     //给头像图片的路径赋值
     user.avatar = `/uploads/${req.file.filename}`;
@@ -35,10 +36,10 @@ router.post('/signup',upload.single('avatar'),function (req,res) {
     })
 
 });
-router.get('/signin',function(req,res){
+router.get('/signin',checkNotLogin,function(req,res){
   res.render('user/signin',{title:'登录'});
 });
-router.post('/signin',function (req,res) {
+router.post('/signin',checkNotLogin,function (req,res) {
     let user = req.body;
     User.findOne(user,function(err,doc){
         if(err){
@@ -51,15 +52,15 @@ router.post('/signin',function (req,res) {
                 req.session.user = doc;
                 res.redirect('/');
             }else{
-              console.log('失败');
               req.flash('error','很遗憾你登录失败,请重新登录!');
               res.redirect('back');
             }
         }
     });
 });
-router.get('/signout',function (req,res) {
-    res.send('退出');
+router.get('/signout',checkLogin,function (req,res) {
+    req.session.user = null;
+    res.redirect('/user/signin');
 });
 module.exports = router;
 /**
