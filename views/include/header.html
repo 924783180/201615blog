@@ -5,6 +5,13 @@
     <title><%=title%></title>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../../public/bootstrap/css/bootstrap.css">
+  <style type="text/css">
+    img{
+      width:20px;
+      height:20px;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
 <nav class="navbar navbar-inverse">
@@ -19,6 +26,15 @@
                 <li><a href="/article/add">发表文章</a></li>
                 <li><a href="/user/signout">退出</a></li>
             </ul>
+            <%if(user){%>
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">
+                  <img src="<%=user.avatar%>" alt="<%=user.username%>"></a>
+                </li>
+                <li><a href="#"><%=user.username%></a>
+                </li>
+              </ul>
+          <%}%>
         </div>
     </div>
 </nav>
