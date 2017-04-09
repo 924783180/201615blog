@@ -6,6 +6,8 @@ let user = require('./routes/user');
 let article = require('./routes/article');
 let bodyParser = require('body-parser');
 let session = require('express-session');
+//这是一个把信息写在session中的中间件
+let flash = require('connect-flash');
 let app = express();
 //指定public目录为静态文件根目录
 app.use(express.static(path.resolve('public')));
@@ -18,6 +20,16 @@ app.use(session({
     saveUninitialized:true,//保存未初始化session
     secret:'zfpx'//加密cookie秘钥
 }));
+//此中间件会向req.flash。可以读写消息
+// req.flash(type,msg) req.flash(type)
+app.use(flash());
+//目标是把success error从req.flash取出来赋给
+// res.locals 是真正渲染模板的对象
+app.use(function(req,res,next){
+ res.locals.success = req.flash('success').toString();
+ res.locals.error = req.flash('error').toString();
+ next();
+});
 //引入模板
 app.set('view engine','html');
 //指定模板的存放根目录为当前文件夹下面的views目录

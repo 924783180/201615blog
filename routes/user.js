@@ -12,8 +12,10 @@ router.post('/signup',function (req,res) {
     let user = req.body;
     User.create(user,function(err,doc){
         if(err){
+            req.flash('error',err.toString());
             res.redirect('back');
         }else{
+            req.flash('success','注册成功，请登录!');
             res.redirect('/user/signin');
         }
     })
@@ -24,14 +26,20 @@ router.get('/signin',function(req,res){
 router.post('/signin',function (req,res) {
     let user = req.body;
     User.findOne(user,function(err,doc){
+      console.log(err);
         if(err){
-            res.redirect('back');
+          req.flash('error',err.toString());
+          res.redirect('back');
         }else{
             if(doc){
+               //在session写入了成功类型的消息
+                req.flash('success','恭喜你登录成功!');
                 req.session.user = doc;
                 res.redirect('/');
             }else{
-                res.redirect('back');
+              console.log('失败');
+              req.flash('error','很遗憾你登录失败,请重新登录!');
+              res.redirect('back');
             }
         }
     });
